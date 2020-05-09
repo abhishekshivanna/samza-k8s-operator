@@ -1,3 +1,7 @@
 domain: samza.apache.org
 repo: samza-k8s-operator
+resources:
+- group: samzaoperator
+  kind: SamzaApplication
+  version: v1alpha1
 version: "2"

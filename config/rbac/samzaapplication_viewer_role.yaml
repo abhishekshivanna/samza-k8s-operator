@@ -1,0 +1,20 @@
+# permissions for end users to view samzaapplications.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: samzaapplication-viewer-role
+rules:
+- apiGroups:
+  - samzaoperator.samza.apache.org
+  resources:
+  - samzaapplications
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - samzaoperator.samza.apache.org
+  resources:
+  - samzaapplications/status
+  verbs:
+  - get

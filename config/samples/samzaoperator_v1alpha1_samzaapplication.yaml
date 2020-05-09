@@ -1,0 +1,7 @@
+apiVersion: samzaoperator.samza.apache.org/v1alpha1
+kind: SamzaApplication
+metadata:
+  name: samzaapplication-sample
+spec:
+  # Add fields here
+  foo: bar
