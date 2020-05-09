@@ -1,0 +1,3 @@
+domain: samza.apache.org
+repo: samza-k8s-operator
+version: "2"
