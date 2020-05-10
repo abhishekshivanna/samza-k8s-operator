@@ -3,5 +3,19 @@ kind: SamzaApplication
 metadata:
   name: samzaapplication-sample
 spec:
-  # Add fields here
-  foo: bar
+  applicationInstance: 1
+  image: 
+    name: samza-operator
+    pullPolicy: Never
+  jobCoordinator:
+    jobCoordinatorPorts:
+      rpc: 8088
+      ui: 8089
+    resources:
+      limits:
+        memory: "2Gi"
+  samzaContainer:
+    replicas: 1
+    resources:
+      limits:
+        memory: "2Gi"

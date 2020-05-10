@@ -17,24 +17,80 @@ limitations under the License.
 package v1alpha1
 
 import (
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
+// ImageSpec defines the Samza application image for the JobCoordinator and SamzaContainers
+type ImageSpec struct {
+	Name string `json:"name"`
+
+	// Image pull policy. One of Always, Never, IfNotPresent. Defaults to Always
+	// if :latest tag is specified, or IfNotPresent otherwise.
+	PullPolicy corev1.PullPolicy `json:"pullPolicy,omitempty"`
+}
+
+// JobCoordinatorPorts defines the port of the JobCoordinator
+type JobCoordinatorPorts struct {
+	// RPC port
+	RPC *int32 `json:"rpc,omitempty"`
+
+	// UI port
+	UI *int32 `json:"ui,omitempty"`
+}
+
+// JobCoordinatorSpec defines the properties of the JobCoordinator
+type JobCoordinatorSpec struct {
+	Ports JobCoordinatorPorts `json:"jobCoordinatorPorts,omitempty"`
+
+	// Compute resources required by the JobCoordinator container.
+	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
+
+	// Volumes for the JobCoordinator pod.
+	Volumes []corev1.Volume `json:"volumes,omitempty"`
+
+	// VolumeMounts on the JobCoordinator container.
+	VolumeMounts []corev1.VolumeMount `json:"volumeMounts,omitempty"`
+}
+
+// SamzaContainerSpec defines the properties of the SamzaContainers
+type SamzaContainerSpec struct {
+	// The number of SamzaContainers or replicas requied for processing
+	Replicas int32 `json:"replicas"`
+
+	// Compute resources required by the SamzaContainer container.
+	Resources corev1.ResourceRequirements `json:"resources,omitempty"`
+
+	// Volumes for the SamzaContainer pod.
+	Volumes []corev1.Volume `json:"volumes,omitempty"`
+
+	// VolumeMounts on the SamzaContainer container.
+	VolumeMounts []corev1.VolumeMount `json:"volumeMounts,omitempty"`
+
+	// TODO: We need specs for 1) host-affinity 2) node labels
+}
 
 // SamzaApplicationSpec defines the desired state of SamzaApplication
 type SamzaApplicationSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of SamzaApplication. Edit SamzaApplication_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// Samza application's image spec
+	Image ImageSpec `json:"image"`
+
+	// Job Coordinator spec
+	JobCoordinator JobCoordinatorSpec `json:"jobCoordinator"`
+
+	// Samza Container spec
+	SamzaContainer SamzaContainerSpec `json:"samzaContainer"`
+
+	// Environment variables shared by all JobCoordinator and SamzaContainer containers.
+	EnvVars []corev1.EnvVar `json:"envVars,omitempty"`
+
+	// Instance number of the Samza Application
+	ApplicationInstance uint32 `json:"applicationInstance"`
 }
 
 // SamzaApplicationStatus defines the observed state of SamzaApplication
 type SamzaApplicationStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 }
 

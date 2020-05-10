@@ -18,6 +18,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/go-logr/logr"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -37,15 +38,16 @@ type SamzaApplicationReconciler struct {
 // +kubebuilder:rbac:groups=samzaoperator.samza.apache.org,resources=samzaapplications,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=samzaoperator.samza.apache.org,resources=samzaapplications/status,verbs=get;update;patch
 
+// Reconcile the observed state towards the desired state for a SamzaApplication
 func (r *SamzaApplicationReconciler) Reconcile(req ctrl.Request) (ctrl.Result, error) {
 	_ = context.Background()
 	_ = r.Log.WithValues("samzaapplication", req.NamespacedName)
 
-	// your logic here
-
+	r.Log.Info(fmt.Sprintf("here: %s", req))
 	return ctrl.Result{}, nil
 }
 
+// SetupWithManager registers this reconciler with the controller manager and starts watching SamzaApplication resources.
 func (r *SamzaApplicationReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
 		For(&samzaoperatorv1alpha1.SamzaApplication{}).
