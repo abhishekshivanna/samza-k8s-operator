@@ -26,8 +26,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	samzaoperatorv1alpha1 "samza-k8s-operator/api/v1alpha1"
-	"samza-k8s-operator/controllers"
+	v1alpha1 "samza-k8s-operator/api/v1alpha1"
+	sctrl "samza-k8s-operator/controllers"
 	// +kubebuilder:scaffold:imports
 )
 
@@ -39,7 +39,7 @@ var (
 func init() {
 	_ = clientgoscheme.AddToScheme(scheme)
 
-	_ = samzaoperatorv1alpha1.AddToScheme(scheme)
+	_ = v1alpha1.AddToScheme(scheme)
 	// +kubebuilder:scaffold:scheme
 }
 
@@ -66,12 +66,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.SamzaApplicationReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("SamzaApplication"),
-		Scheme: mgr.GetScheme(),
-	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "SamzaApplication")
+	reconciler, err := sctrl.NewSamzaApplicationReconciler(mgr)
+	if err != nil {
+		setupLog.Error(err, "unable to create reconciler", "controller", v1alpha1.SamzaApplicationKind)
+		os.Exit(1)
+	}
+
+	if err = reconciler.SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", v1alpha1.SamzaApplicationKind)
 		os.Exit(1)
 	}
 	// +kubebuilder:scaffold:builder

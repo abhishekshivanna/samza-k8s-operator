@@ -39,8 +39,8 @@ spec:
               format: int32
               type: integer
             envVars:
-              description: Environment variables shared by all JobManager, TaskManager
-                and job containers.
+              description: Environment variables shared by all JobCoordinator and
+                SamzaContainer containers.
               items:
                 description: EnvVar represents an environment variable present in
                   a Container.
@@ -2776,6 +2776,13 @@ spec:
           type: object
         status:
           description: SamzaApplicationStatus defines the observed state of SamzaApplication
+          properties:
+            phase:
+              description: Phase is the current phase of the state machine the application
+                deployment is in
+              type: string
+          required:
+          - phase
           type: object
       type: object
   version: v1alpha1

@@ -21,6 +21,11 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+const (
+	SamzaApplicationKind = "SamzaApplication"
+	OperatorName         = "SamzaOperator"
+)
+
 // ImageSpec defines the Samza application image for the JobCoordinator and SamzaContainers
 type ImageSpec struct {
 	Name string `json:"name"`
@@ -89,10 +94,29 @@ type SamzaApplicationSpec struct {
 	ApplicationInstance uint32 `json:"applicationInstance"`
 }
 
+// SamzaApplicationPhase is used to represent the current phase of the application deployment
+type SamzaApplicationPhase string
+
 // SamzaApplicationStatus defines the observed state of SamzaApplication
 type SamzaApplicationStatus struct {
-	// Important: Run "make" to regenerate code after modifying this file
+	// Phase is the current phase of the state machine the application deployment is in
+	Phase SamzaApplicationPhase `json:"phase"`
 }
+
+// GetPhase is used to get the phase of the Samza Application deployment
+func (status *SamzaApplicationStatus) GetPhase() SamzaApplicationPhase {
+	return status.Phase
+}
+
+// UpdatePhase is used to update the phase of the Samza Application deployment
+func (status *SamzaApplicationStatus) UpdatePhase(phase SamzaApplicationPhase) {
+	status.Phase = phase
+}
+
+const (
+	// SamzaApplicationNew represents a brand new application in the cluster
+	SamzaApplicationNew SamzaApplicationPhase = ""
+)
 
 // +kubebuilder:object:root=true
 
