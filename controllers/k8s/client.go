@@ -25,27 +25,27 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 )
 
-// ClusterInterface is used to interact with the Kuberneters Cluster
-type ClusterInterface interface {
+// ClientInterface is used to interact with the Kuberneters Cluster
+type ClientInterface interface {
 	CreateK8sObject(ctx context.Context, object runtime.Object) error
 }
 
-// Cluster is an implementation of the ClusterInterface
-type Cluster struct {
+// Client is an implementation of the ClientInterface
+type Client struct {
 	cache  cache.Cache
 	client client.Client
 }
 
-// NewCluster creates a new Cluster instances
-func NewCluster(mgr manager.Manager) ClusterInterface {
-	return &Cluster{
+// NewClient creates a new Client instances
+func NewClient(mgr manager.Manager) ClientInterface {
+	return &Client{
 		cache:  mgr.GetCache(),
 		client: mgr.GetClient(),
 	}
 }
 
 // CreateK8sObject creates a new runtime object on the K8s Cluster
-func (k *Cluster) CreateK8sObject(ctx context.Context, object runtime.Object) error {
+func (k *Client) CreateK8sObject(ctx context.Context, object runtime.Object) error {
 	objCreate := object.DeepCopyObject()
 	err := k.client.Create(ctx, objCreate)
 	if err != nil {

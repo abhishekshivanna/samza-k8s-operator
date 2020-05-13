@@ -28,14 +28,14 @@ type ControllerInterface interface {
 
 // Controller is used to manage deployement of different components
 type Controller struct {
-	k8Cluster k8s.ClusterInterface
+	kubClient k8s.ClientInterface
 	mgr       ctrl.Manager
 }
 
 // NewController creates a new instances of SamzaController
-func NewController(k8sCluster k8s.ClusterInterface, mgr ctrl.Manager) ControllerInterface {
+func NewController(kubClient k8s.ClientInterface, mgr ctrl.Manager) ControllerInterface {
 	return &Controller{
-		k8Cluster: k8sCluster,
+		kubClient: kubClient,
 		mgr:       mgr,
 	}
 }

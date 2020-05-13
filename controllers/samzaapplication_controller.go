@@ -63,7 +63,7 @@ type SamzaApplicationReconciler struct {
 	eventRecorder     record.EventRecorder
 }
 
-// NewSamzaReconciler returns a new instance of SamzaApplicationReconciler
+// NewSamzaApplicationReconciler returns a new instance of SamzaApplicationReconciler
 func NewSamzaApplicationReconciler(mgr manager.Manager) (*SamzaApplicationReconciler, error) {
 	samzaStateMachine := NewSamzaApplicationStateMachine(mgr)
 	return &SamzaApplicationReconciler{

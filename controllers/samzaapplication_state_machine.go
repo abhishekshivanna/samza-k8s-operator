@@ -19,7 +19,7 @@ package controllers
 import (
 	"context"
 	"samza-k8s-operator/api/v1alpha1"
-	kubeCluster "samza-k8s-operator/controllers/k8s"
+	"samza-k8s-operator/controllers/k8s"
 	"samza-k8s-operator/controllers/samza"
 
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -32,17 +32,15 @@ type SamzaApplicationStateMachineInterface interface {
 
 // NewSamzaApplicationStateMachine creates a new SamzaApplicationStateMachine
 func NewSamzaApplicationStateMachine(mgr ctrl.Manager) SamzaApplicationStateMachineInterface {
-	k8sClient := kubeCluster.NewCluster(mgr)
+	client := k8s.NewClient(mgr)
 	return &SamzaApplicationStateMachine{
-		mgr:             mgr,
-		samzaController: samza.NewController(k8sClient, mgr),
+		samzaController: samza.NewController(client, mgr),
 	}
 }
 
 // SamzaApplicationStateMachine holds the context and state to handle
 // reconcile request.
 type SamzaApplicationStateMachine struct {
-	mgr             ctrl.Manager
 	samzaController samza.ControllerInterface
 }
 
